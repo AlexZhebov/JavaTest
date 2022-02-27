@@ -235,7 +235,7 @@ div#QuestionBox {
     bottom: 0px;
     top: 0px;
     right: 0px;
-    display: block;
+    display: none;
 }
 div#QuestionBox div.QuestionBox {
     border: 0px solid #ada9a5;

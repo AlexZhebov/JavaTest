@@ -22,6 +22,9 @@ var bgTransparent = document.getElementById("AllScreenTransparent");
 /** Div c полупрозрачным фоном **/
 var formAddPerson = document.getElementById("AllScreen");
 
+/** Div c блоком вопроса **/
+var qBox = document.getElementById("QuestionBox");
+
 /**
  * Функция выполнения запроса AJAX
  * @param method - GET или POST
@@ -155,11 +158,20 @@ function openFormPerson() {
  * @param i - индекс массива
  */
 function deletePerson(i) {
-    arrPerson[i].id = String(arrPerson[i].id);
-    sendRequest("POST", "http://localhost/showdb?persons=delete", arrPerson[i])
-        .then(data => {console.log(data);})
-    arrPerson.splice(i, 1);
-    AllPersonToDiv();
+    QustionBox("Запрос на удаление", "Вы действительно хотите удалить \"" + arrPerson[i].firstName + " " +arrPerson[i].lastName +
+        " (" + arrPerson[i].city + ")" + "\"?", () => {
+        arrPerson[i].id = String(arrPerson[i].id);
+        sendRequest("POST", "http://localhost/showdb?persons=delete", arrPerson[i])
+            .then(data => {console.log(data);})
+        arrPerson.splice(i, 1);
+        AllPersonToDiv();
+        qBox.style.display = "none";
+        bgTransparent.style.display = "none";
+    }, () => {
+        qBox.style.display = "none";
+        bgTransparent.style.display = "none";
+    });
+
 
 }
 
@@ -215,6 +227,15 @@ function addPerson() {
     cancelPerson();
     AllPersonToDiv(); // обновим див блок
 
+}
+
+function QustionBox (qTitle, qText, fYes, fNo) {
+    bgTransparent.style.display = "block";
+    document.getElementById("QuestionTitle").innerHTML = qTitle;
+    document.getElementById("QuestionText").innerHTML = qText;
+    qBox.style.display = "block";
+    document.getElementById("QuestionButtonYes").onclick = fYes;
+    document.getElementById("QuestionButtonNo").onclick = fNo;
 }
 
 /**
